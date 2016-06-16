@@ -1,0 +1,7 @@
+Host *
+  ForwardAgent yes
+
+Host *.
+  Hostname %hclient.udev.se
+  User aegir
+
