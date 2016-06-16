@@ -3,3 +3,36 @@
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH"
 
 alias dnsreset="sudo killall -HUP mDNSResponder"
+
+function parse_vagrant_status {
+  if [[ ! -a 'Vagrantfile' || "$VS" == "OFF" ]]; then
+    return
+  fi
+
+  status=`vagrant status 2>&1`
+  if [[ -n `echo ${status} | grep "poweroff"` ]]; then
+    echo " [off]"
+  fi
+  if [[ -n `echo ${status} | grep "running"` ]]; then
+    echo " [on]"
+  fi
+  if [[ -n `echo ${status} | grep "aborted"` ]]; then
+    echo " [aborted]"
+  fi
+  return
+}
+
+# ls colors
+export CLICOLOR=1
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+ 
+# use native git completion and prompt info
+source /usr/local/etc/bash_completion.d/git-completion.bash
+source /usr/local/etc/bash_completion.d/git-prompt.sh
+ 
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=
+GIT_PS1_SHOWUNTRACKEDFILES=1
+GIT_PS1_SHOWCOLORHINTS=1
+ 
+PROMPT_COMMAND='__git_ps1 "$DARK_PURPLE\w$YELLOW$(parse_vagrant_status)$NORMAL" " $GREY$(date "+%H:%M:%S")$NORMAL \n\\\$ "'
