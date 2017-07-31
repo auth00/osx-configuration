@@ -1,8 +1,18 @@
 #!/bin/bash
 
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH"
+ssh-add -K 2>/dev/null
+
+export ANDROID_HOME=/Users/thomas/Development/android-sdk
+
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
+
+export LC_ALL="en_US.UTF-8"
 
 alias dnsreset="sudo killall -HUP mDNSResponder"
+
+export HOMEBREW_GITHUB_API_TOKEN="e780995ae6bf6ce46addc9275055743e6a85107a"
+
+VS="OFF"
 
 function parse_vagrant_status {
   if [[ ! -a 'Vagrantfile' || "$VS" == "OFF" ]]; then
@@ -35,4 +45,20 @@ GIT_PS1_SHOWSTASHSTATE=
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWCOLORHINTS=1
  
-PROMPT_COMMAND='__git_ps1 "$DARK_PURPLE\w$YELLOW$(parse_vagrant_status)$NORMAL" " $GREY$(date "+%H:%M:%S")$NORMAL \n\\\$ "'
+PROMPT_COMMAND='__git_ps1 "$DARK_PURPLE\w$YELLOW$(parse_vagrant_status)$NORMAL" " $GREY$NORMAL \n\\\$ "'
+PROMPT_COMMAND=''
+
+ggrep() {
+    find . -type d -name .git | while read line; do
+        (
+        cd $line/..
+        cwd=$(pwd)
+        echo "$(tput setaf 2)$cwd$(tput sgr0)"
+        git grep -n "$@"
+        )
+    done
+}
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

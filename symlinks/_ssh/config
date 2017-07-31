@@ -1,7 +1,25 @@
 Host *
   ForwardAgent yes
 
-Host *.
-  Hostname %hclient.udev.se
+Host utbytingen.se
+  User root
+  Port 21122
+
+Host *.c
+  Hostname %hlient.udev.se
   User aegir
 
+Host ha
+  User pi
+
+Host uitweb.internal.udev.se
+  Port 2222
+  User aegir
+
+Host *.i
+  Hostname %h.udev.se
+  User aegir
+
+Host transportoren.se
+  Port 2222
+  User aegir
